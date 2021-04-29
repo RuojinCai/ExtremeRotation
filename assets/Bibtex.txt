@@ -1,0 +1,6 @@
+@inproceedings{Cai2021Extreme,
+ title={Extreme Rotation Estimation using Dense Correlation Volumes},
+ author={Cai, Ruojin and Hariharan, Bharath and Snavely, Noah and Averbuch-Elor, Hadar},
+ booktitle={IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR)},
+ year={2021}
+}

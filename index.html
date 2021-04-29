@@ -1,1 +1,416 @@
-coming soon...
+<!doctype html>
+<html lang="en">
+    <head>
+        <!-- Required meta tags -->
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+        <!-- Bootstrap CSS -->
+        <!--<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" 
+                               integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">-->
+		<link rel="stylesheet" href="assets/bootstrap.min.css">
+		
+        <title>Extreme Rotation Estimation using Dense Correlation Volumes</title>
+
+        <!-- Global site tag (gtag.js) - Google Analytics -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id=UA-175559969-1"></script>
+        <script>
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+
+            gtag('config', 'UA-175559969-1');
+        </script>
+		
+		<style>
+			.card {
+				position: relative; width: 100%;height: 100%;
+				display: inline;
+			}
+			.card .img-top {
+				width:100%; height:100%;							
+				position: absolute;
+				top: 0;
+				left: 0;
+				opacity: 0;
+			}
+			.card:hover .img-top {
+				opacity: 1;
+			}
+			.card2 {
+				position: relative; width: 100%;height: 100%;
+				display: inline;
+			}
+			.card2 .img-top {
+				width:100%; height:100%;							
+				position: relative;
+				top: 0;
+				left: 0;
+				opacity: 0.5;
+			}
+			.card2:hover .img-top {
+				opacity: 1;
+			}
+		</style>
+    </head>
+    <body class="container" style="max-width:840px">
+
+        <!-- Title -->
+        <div>
+            <div class='row mt-5 mb-3'>
+                <div class='col text-center'>
+                    <p class="h2 font-weight-normal">Extreme Rotation Estimation using </p>
+					<p class="h2 font-weight-normal">Dense Correlation Volumes</p>
+                </div>
+            </div>
+
+            <!-- authors -->
+            <div class='row text-center h6 font-weight-bold pl-4 pr-4 mb-4'>
+                <a class="col-md-3 col-xs-6" href="http://www.cs.cornell.edu/~ruojin/"><span>Ruojin Cai</span></a>
+				<a class="col-md-3 col-xs-6" href="http://home.bharathh.info/"><span>Bharath Hariharan</span></a>                
+                <a class="col-md-3 col-xs-6" href="http://www.cs.cornell.edu/~snavely/"><span>Noah Snavely</span></a>
+                <a class="col-md-3 col-xs-6" href="http://www.cs.cornell.edu/~hadarelor/"><span>Hadar Averbuch-Elor</span></a>
+            </div>
+
+            <!-- affiliations -->
+            <div class='row mt-1 mt-2' >
+                <div class='col text-center'>
+                    <p class="h6">
+                    <a href="https://www.cornell.edu/"><span>Cornell University</span></a>
+                    </p>
+                    <p class="h6"> CVPR 2021</p>
+                    </br>
+                </div>
+            </div>	
+        </div>
+		
+		<!-- teaser -->
+		<div class='row justify-content-center' >
+			<!--  style="position: relative; width: 100%;height: 0;padding-bottom: 60%; margin:0"
+			<img 
+				class="img-fluid rounded mx-auto d-block" 
+				src="assets/teaser.png" alt="teaser" 
+				style="position:absolute; width:100%; height:100%; top:0px; left:0px;"                     
+			>-->
+			<div class="card">
+				<img src="./assets/cues/images.png" alt="image" class="img-fluid rounded mx-auto d-block" >
+				<div class="img-top">
+				<img src="./assets/cues/cues.png" alt="image" class="img-fluid rounded mx-auto d-block" >
+				</div>
+			</div>
+			<div class='col-md-12 col-sm-12 col-xs-12 align-middle mt-1'>
+			<p class='h6'>
+				<em>How can we estimate relative rotation between images in extreme non-overlapping cases? 
+        (Hover over the images to reveal some implicit cues!)</em>
+			</p>
+			</div>
+			<div class='col-md-12 col-sm-12 col-xs-12 align-middle mt-1'>
+			<p class="text-break">
+			Above we show two non-overlapping
+			image pairs capturing an urban street scene (left) and a
+			church (right). Possible cues revealing their relative geometric relationship include sunlight
+			and direction of shadows in outdoor scenes and
+      parallel lines and vanishing points in manmade scenes.
+			<!--lines parallel in 3D in indoor scenes, from which vanishing points can be derived.-->
+			</p>
+			</div>
+      <div class='col-md-12 col-sm-12 col-xs-12 align-middle mt-1'>
+			<p class='h6 font-weight-bold '>
+      In this work, we present an approach for reasoning about such "hidden" cues for 
+      estimating the relative rotation between a pair of (possibly) non-overlapping images.
+      <!--
+      Given the presence of such "hidden" cues, how can we guide a network to reason about these 
+      for estimating the relative rotation between a pair of (possibly) non-overlapping images?-->
+      </p>
+			</div>
+		</div>
+
+		<!--<div class='row justify-content-center' >
+			<div class="card">
+				<img src="./assets/teaser_1.png" alt="image" class="img-fluid rounded mx-auto d-block" >
+				<div class="img-top">
+				<img src="./assets/teaser_2.png" alt="image" class="img-fluid rounded mx-auto d-block" >
+				</div>
+			</div>
+			<div class='col-md-12 col-sm-12 col-xs-12 align-middle mt-1'>
+			<p class='h6 font-weight-bold '>
+				How can we estimate relative rotation between images
+				in extreme non-overlapping cases? (Touch the image!)
+			</p>
+			</div>
+			<div class='col-md-12 col-sm-12 col-xs-12 align-middle mt-1'>
+			<p class="text-break">
+			These visualizations suggest that our method reasons
+			about pointwise correspondences for overlapping pairs (e.g. on top
+			of the refrigerator) and implicit cues for non-overlapping pairs (e.g.
+			related to vanishing points).
+			</p>
+			</div>
+		</div>-->
+
+        <!-- Paper section -->
+        <div>
+            <hr>
+            <div class='row'>
+                <div class='col-md-3 col-sm-3 col-xs-12 text-center col-sm-3'>
+                    <div class="row mt-4">
+                        <a href="https://arxiv.org/pdf/2104.13530.pdf" style="max-width:200px; margin-left:auto; margin-right:auto"><!-- pdf link -->
+                            <img src="assets/paper.png" alt="paper-snapshot" class="img-thumbnail" width="80%" style="box-shadow: 10px 10px 5px grey;">
+                        </a>
+                    </div>
+                    <div class="row mt-4">
+                        <div class="col">
+                            <a class="h5" href="https://arxiv.org/abs/2104.13530" style="margin-right:10px">
+                                <span>[Arxiv]</span>
+                            </a>
+                            <a class="h5" href="" style="margin-right:10px">
+                                <span>[Code] (coming soon)</span>
+                            </a>
+                            <a class="h5" href="assets/Bibtex.txt" target="_blank">
+                                <span>[Bibtex]</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class='col-md-9 col-sm-9 col-xs-12'>
+                    <p class='h4 font-weight-bold '>Abstract</p>
+                    <p style='line-height:1;'> 
+                    We present a technique for estimating the relative 3D rotation
+					of an RGB image pair in an extreme setting, where the
+					images have little or no overlap. We observe that, even when
+					images do not overlap, there may be rich hidden cues as to
+					their geometric relationship, such as light source directions,
+					vanishing points, and symmetries present in the scene. We
+					propose a network design that can automatically learn such
+					implicit cues by comparing all pairs of points between the
+					two input images. Our method therefore constructs dense
+					feature correlation volumes and processes these to predict
+					relative 3D rotations. Our predictions are formed over a
+					fine-grained discretization of rotations, bypassing difficulties
+					associated with regressing 3D rotations. We demonstrate our
+					approach on a large variety of extreme RGB image pairs,
+					including indoor and outdoor images captured under different
+					lighting conditions and geographic locations. Our
+					evaluation shows that our model can successfully estimate
+					relative rotations among non-overlapping images without
+					compromising performance over overlapping image pairs.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Video -->		
+		<!--<div>
+            <hr> 
+			<div id="carouselExampleControls" class="carousel slide" data-ride="false" data-interval="false">
+			    <div class="carousel-inner">
+					<div class="carousel-item active">
+						<div class="row text-center">
+							<div class="col">
+							<p class="h2 mr-3">Short Video</p>
+							</div>
+						</div>
+						<div class="row mt-3 text-center center-block" style=" margin-left:auto; margin-right:auto; max-width:560px">
+							<div class="col ml-1 mr-1" style="position: relative; width: 100%;height: 0;padding-bottom: 56%;">
+							<iframe src="https://www.youtube.com/embed/HQTbtFzDYAU" frameborder="0" 
+								allow="accelerometer; encrypted-media; gyroscope; picture-in-picture" 
+								allowfullscreen="" style="position: absolute;width: 100%;height: 100%; left: 0; top: 0;">
+							</iframe>
+							</div>
+						</div>
+					</div>
+					<div class="carousel-item">
+						<div class="row text-center">
+							<div class="col">
+							<p class="h2 mr-3">Long Video</p>
+							</div>
+						</div>
+						<div class="row mt-3 text-center center-block" style=" margin-left:auto; margin-right:auto; max-width:560px">
+							<div class="col ml-1 mr-1" style="position: relative; width: 100%;height: 0;padding-bottom: 56%;">
+								<iframe src="https://www.youtube.com/embed/xCCdnzt7NPA" frameborder="0" 
+									allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" 
+									allowfullscreen="" style="position: absolute;width: 100%;height: 100%; left: 0; top: 0;">
+							</iframe>
+							</div>
+						</div>
+					</div>
+			    </div>
+				
+				<a class="carousel-control-prev" href="#carouselExampleControls" role="button" data-slide="prev">
+					<span class="carousel-control-prev-icon" aria-hidden="true"></span>
+					<span class="sr-only">Previous</span>
+				</a>
+				<a class="carousel-control-next" href="#carouselExampleControls" role="button" data-slide="next">
+					<span class="carousel-control-next-icon" aria-hidden="true"></span>
+					<span class="sr-only">Next</span>
+				</a>
+				
+			</div>
+        </div>-->
+				
+
+        <!-- Architecture, explaination -->
+        <div>
+            <hr>
+            <div class='row text-center'>
+                <div class='col'>
+                    <p class='h3'>Overview of our Method</p>
+                </div>
+            </div>
+			
+			<div class='row mt-3'>                
+                <div class='col-md-12 col-sm-12 col-xs-12 mt-3'>
+                    <img src="assets/overview.png" class="img-fluid" alt="overview">
+                </div>  
+			</div> 
+			<div class='row mt-3'>        				
+                <div class='col-md-12 col-sm-12 col-xs-12 mt-3'>
+                    <p class="text-break">
+                    Given a pair of images, a shared-weight Siamese encoder extracts feature maps. We compute a 4D correlation
+					volume using the inner product of features, from which our model predicts the relative rotation (here, as distributions over Euler angles).
+                    </p>
+                </div>
+            </div>
+
+            <div class='row mt-3'>
+                <div class='col-md-6 col-sm-6 col-xs-12 mt-3'>
+                    <img src="assets/4dcrv.jpg" class="img-fluid" alt="4dcrv">
+                </div>
+                <div class='col-md-6 col-sm-6 col-xs-12 align-middle mt-3'>
+                    <p class="text-break">
+                    A 4D correlation volume is
+					calculated from a pair of image feature maps. Given a feature vector
+					from Image 1, we compute the dot product with all feature vectors
+					in Image 2, and build up a 2D slice of size H x W. Combining
+					all 2D slices over all feature vectors in Image 1, we obtain a 4D
+					correlation volume of size H x W x H x W.  
+					<br>
+					Our correlation volumes
+					are implicitly assigned a dual role which emerges
+					through training on both overlapping and non-overlapping
+					pairs. When the input image pair contains significant overlap,
+					pointwise correspondence can be computed and transferred
+					onward to the rotation prediction module. When the input image
+					pair contains little to no overlap, the correlation volume
+					can assume the novel role of detecting implicit cues.
+                    </p>
+                </div>
+            </div>
+						
+        </div>
+
+        <!-- Results, transformation -->
+        <div>
+            <hr>
+            <div class="row text-center">
+                <div class="col">
+                    <p class="h3">Predicted Rotation Results on Indoor Scenes</p>					
+                </div>
+            </div>
+			<div class="row">
+				<div class='col-md-12 col-sm-12 col-xs-12 align-middle mt-1'>
+					<p class="text-break">
+          Hover over the images to see the full panoramas with the ground-truth perspective images marked in red. 
+					We show our predicted viewpoints (in yellow) and the result obtained by a regression model predicting a continuous representation in 6D (in blue). 
+          </p>
+				</div>
+				<img src="./assets/results/title.png" alt="image" class="img-fluid rounded mx-auto d-block" >				
+			</div>
+			<div class="row">
+			<div class="card2">
+						<img src="./assets/results/sun360_1.png" alt="pers" class="img-fluid rounded mx-auto d-block">
+						<div class="img-top">
+							<img src="./assets/results/sun360_2.png" class="img-fluid rounded mx-auto d-block" alt="pano">
+						</div>
+				</div>
+			</div>
+			<div class="row">
+			<div class="card2">
+						<img src="./assets/results/interiornet_1.png" alt="pers" class="img-fluid rounded mx-auto d-block">
+						<div class="img-top">
+							<img src="./assets/results/interiornet_2.png" class="img-fluid rounded mx-auto d-block" alt="pano">
+						</div>
+				</div>
+			</div>
+       
+			
+			<div class="row text-center">
+          <div class="col">
+              </br>
+              <p class="h5">Predicted Rotation Results on Outdoor Scenes and Generalization to New Cities</p>
+          </div>
+      </div>
+      
+			
+      <div class="row">
+      <div class='col-md-12 col-sm-12 col-xs-12 align-middle mt-1'>
+					<p class="text-break">
+          We show results on images from unseen panoramas in Manhattan, Pittsburgh and London, 
+          all obtained from a model trained on images from Manhattan <b>only</b>.
+          </p>
+				</div>
+			<div class="card2">
+						<img src="./assets/results/manhattan_1.png" alt="pers" class="img-fluid rounded mx-auto d-block">
+						<div class="img-top">
+							<img src="./assets/results/manhattan_2.png" class="img-fluid rounded mx-auto d-block" alt="pano">
+						</div>
+				</div>
+			</div>
+			<div class="row">
+			<div class="card2">
+						<img src="./assets/results/pittsburgh_1.png" alt="pers" class="img-fluid rounded mx-auto d-block">
+						<div class="img-top">
+							<img src="./assets/results/pittsburgh_2.png" class="img-fluid rounded mx-auto d-block" alt="pano">
+						</div>
+				</div>
+			</div>
+			<div class="row">
+			<div class="card2">
+						<img src="./assets/results/london_1.png" alt="pers" class="img-fluid rounded mx-auto d-block">
+						<div class="img-top">
+							<img src="./assets/results/london_2.png" class="img-fluid rounded mx-auto d-block" alt="pano">
+						</div>
+				</div>
+			</div>
+			<!--
+			<div class="row">
+			<img src="./assets/results/manhattan_1.png" alt="pers" class="img-fluid rounded mx-auto d-block">
+			<img src="./assets/results/manhattan_2.png" class="img-fluid rounded mx-auto d-block" alt="pano">
+			<img src="./assets/results/pittsburgh_1.png" alt="pers" class="img-fluid rounded mx-auto d-block">
+			<img src="./assets/results/pittsburgh_2.png" class="img-fluid rounded mx-auto d-block" alt="pano">
+			<img src="./assets/results/london_1.png" alt="pers" class="img-fluid rounded mx-auto d-block">
+			<img src="./assets/results/london_2.png" class="img-fluid rounded mx-auto d-block" alt="pano">
+			</div>-->
+        </div>
+		
+		<!--<div>
+            <hr>
+            <div class='row text-center'>
+                <div class='col'>
+                    <p class='h2'>Video (Coming soon...)</p>
+                </div>
+            </div>
+		</div>-->
+		
+        <!-- Ack -->
+        <div>
+            <hr>
+
+            <div class='row mb-5 text-center'>
+                <div class='col'>
+                    <p class='h2'>Acknowledgements</p>
+                    <p>This work was supported in part by the National Science Foundation (IIS-2008313).</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Optional JavaScript -->
+        <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" 
+                integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" 
+                integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" 
+                integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    </body>
+</html>
